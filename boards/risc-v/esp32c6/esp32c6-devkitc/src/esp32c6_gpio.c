@@ -60,8 +60,10 @@
 
 /* Pin 1 and 2 are used for this example as GPIO outputs. */
 
-#define GPIO_OUT1  1
-#define GPIO_OUT2  2
+#define GPIO_OUT1  0
+#define GPIO_OUT2  1
+#define GPIO_OUT3  10
+#define GPIO_OUT4  11
 
 #if !defined(CONFIG_ESPRESSIF_GPIO_IRQ) && BOARD_NGPIOINT > 0
 #  error "NGPIOINT is > 0 and GPIO interrupts aren't enabled"
@@ -127,7 +129,7 @@ static const struct gpio_operations_s gpout_ops =
 
 static const uint32_t g_gpiooutputs[BOARD_NGPIOOUT] =
 {
-  GPIO_OUT1, GPIO_OUT2
+  GPIO_OUT1, GPIO_OUT2, GPIO_OUT3, GPIO_OUT4
 };
 
 static struct espgpio_dev_s g_gpout[BOARD_NGPIOOUT];
