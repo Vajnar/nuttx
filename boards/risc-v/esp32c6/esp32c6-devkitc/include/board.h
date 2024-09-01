@@ -27,7 +27,7 @@
 
 /* GPIO pins used by the GPIO Subsystem */
 
-#define BOARD_NGPIOOUT    4 /* Amount of GPIO Output pins */
+#define BOARD_NGPIOOUT    2 /* Amount of GPIO Output pins */
 #define BOARD_NGPIOINT    1 /* Amount of GPIO Input w/ Interruption pins */
 
 /* ESP32C6-Generic GPIOs ****************************************************/
