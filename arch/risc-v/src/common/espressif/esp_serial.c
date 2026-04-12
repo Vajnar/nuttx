@@ -122,7 +122,9 @@
 #endif /* CONSOLE_UART */
 
 #ifdef CONFIG_ESPRESSIF_USBSERIAL
-#  define CONSOLE_DEV           g_uart_usbserial
+#  ifndef CONSOLE_DEV
+#    define CONSOLE_DEV         g_uart_usbserial
+#  endif
 #  define TTYACM0_DEV           g_uart_usbserial
 #endif
 
