@@ -143,6 +143,10 @@
 #  include "esp_board_oa_tc6.h"
 #endif
 
+#ifdef CONFIG_VIDEO_FB
+#  include <nuttx/video/fb.h>
+#endif
+
 #ifdef CONFIG_MMCSD_SPI
 #  include "esp_board_mmcsd.h"
 #endif
@@ -579,6 +583,14 @@ int esp_bringup(void)
   if (ret < 0)
     {
       syslog(LOG_ERR, "ERROR: esp_oa_tc6_initialize failed: %d\n", ret);
+    }
+#endif
+
+#ifdef CONFIG_VIDEO_FB
+  ret = fb_register(0,0);
+  if (ret < 0)
+    {
+      syslog(LOG_ERR, "ERROR: Failed to initialize Frame Buffer Driver.\n");
     }
 #endif
 

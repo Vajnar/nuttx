@@ -90,6 +90,10 @@ ifeq ($(CONFIG_NET_OA_TC6),y)
   CSRCS += esp_board_oa_tc6.c
 endif
 
+ifeq ($(CONFIG_LCD_ILI9341),y)
+  CSRCS += esp_board_ili9341.c
+endif
+
 ifeq ($(CONFIG_MMCSD_SPI),y)
   CSRCS += esp_board_mmcsd.c
 endif
