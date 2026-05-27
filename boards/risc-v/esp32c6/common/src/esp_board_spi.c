@@ -76,7 +76,7 @@ int esp_spi2_cmddata(struct spi_dev_s *dev, uint32_t devid, bool cmd)
        *  data bits are data or a command.
        */
 
-      esp_gpiowrite(CONFIG_ESPRESSIF_SPI2_MISOPIN, !cmd);
+      esp_gpiowrite(11, !cmd);
 
       return OK;
     }
