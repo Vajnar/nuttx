@@ -75,6 +75,15 @@
 #  include "espressif/esp_efuse.h"
 #endif
 
+#ifdef CONFIG_LCD_DEV
+#  include <nuttx/board.h>
+#  include <nuttx/lcd/lcd_dev.h>
+#endif
+
+#ifdef CONFIG_VIDEO_FB
+#  include <nuttx/video/fb.h>
+#endif
+
 #ifdef CONFIG_ESP_RMT
 #  include "esp_board_rmt.h"
 #endif
@@ -141,10 +150,6 @@
 
 #ifdef CONFIG_NET_OA_TC6
 #  include "esp_board_oa_tc6.h"
-#endif
-
-#ifdef CONFIG_VIDEO_FB
-#  include <nuttx/video/fb.h>
 #endif
 
 #ifdef CONFIG_MMCSD_SPI
@@ -587,10 +592,24 @@ int esp_bringup(void)
 #endif
 
 #ifdef CONFIG_VIDEO_FB
-  ret = fb_register(0,0);
+  ret = fb_register(0, 0);
   if (ret < 0)
     {
       syslog(LOG_ERR, "ERROR: Failed to initialize Frame Buffer Driver.\n");
+    }
+#elif defined(CONFIG_LCD)
+  ret = board_lcd_initialize();
+  if (ret < 0)
+    {
+      syslog(LOG_ERR, "ERROR: Failed to initialize LCD.\n");
+    }
+#endif
+
+#ifdef CONFIG_LCD_DEV
+  ret = lcddev_register(0);
+  if (ret < 0)
+    {
+      syslog(LOG_ERR, "ERROR: lcddev_register() failed: %d\n", ret);
     }
 #endif
 

@@ -244,9 +244,6 @@ static int esp32s2_ili93414ws_sendparam(struct ili9341_lcd_s *lcd,
 
   lcdinfo("param=%04x\n", param);
 
-  SPI_SETBITS(priv->spi, 8);
-
-  SPI_CMDDATA(priv->spi, SPIDEV_DISPLAY(0), false);
   SPI_SEND(priv->spi, param);
 
   return OK;
@@ -277,6 +274,7 @@ static int esp32s2_ili93414ws_sendgram(struct ili9341_lcd_s *lcd,
 
   SPI_SETBITS(priv->spi, 16);
   SPI_SNDBLOCK(priv->spi, wd, nwords);
+  SPI_SETBITS(priv->spi, 8);
 
   return OK;
 }
@@ -301,11 +299,7 @@ static int esp32s2_ili93414ws_recvparam(struct ili9341_lcd_s *lcd,
 {
   struct ili93414ws_lcd_s *priv = (struct ili93414ws_lcd_s *)lcd;
 
-  SPI_SETBITS(priv->spi, 8);
-
-  SPI_CMDDATA(priv->spi, SPIDEV_DISPLAY(0), false);
-
-  *param = (uint8_t)(SPI_SEND(priv->spi, (uintptr_t)param) & 0xff);
+  SPI_RECVBLOCK(priv->spi, param, 1);
 
   return OK;
 }
@@ -335,6 +329,7 @@ static int esp32s2_ili93414ws_recvgram(struct ili9341_lcd_s *lcd,
 
   SPI_SETBITS(priv->spi, 16);
   SPI_RECVBLOCK(priv->spi, wd, nwords);
+  SPI_SETBITS(priv->spi, 8);
 
   return OK;
 };
@@ -372,13 +367,13 @@ int board_lcd_initialize(void)
 
       /* Initialize non-SPI GPIOs */
 
-      esp_configgpio(GPIO_LCD_DC, OUTPUT_FUNCTION_3);
+      esp_configgpio(GPIO_LCD_DC, INPUT | OUTPUT);
       esp_gpio_matrix_out(GPIO_LCD_DC, SIG_GPIO_OUT_IDX, 0, 0);
 
-      esp_configgpio(GPIO_LCD_RST, INPUT_FUNCTION_3);
+      esp_configgpio(GPIO_LCD_RST, INPUT | OUTPUT);
       esp_gpio_matrix_out(GPIO_LCD_RST, SIG_GPIO_OUT_IDX, 0, 0);
 
-      esp_configgpio(GPIO_LCD_BCKL, OUTPUT_FUNCTION_3);
+      esp_configgpio(GPIO_LCD_BCKL, INPUT | OUTPUT);
       esp_gpio_matrix_out(GPIO_LCD_BCKL, SIG_GPIO_OUT_IDX, 0, 0);
 
       /* Reset ILI9341 */
